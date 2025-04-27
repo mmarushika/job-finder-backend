@@ -28,6 +28,7 @@ sql =
     name VARCHAR(255),
     email VARCHAR(255),
     phone_no INTEGER,
+    city VARCHAR(255),
     yoe VARCHAR(20),
     qualification VARCHAR(50),
     description TEXT(65535),
@@ -35,7 +36,31 @@ sql =
 )`
 
 sql = 
-`CREATE TABLE fields (
+`CREATE TABLE jobs (
+    poster VARCHAR(255),
+    id VARCHAR(30),
+    timestamp VARCHAR(50),
+    title VARCHAR(255),
+    employer_name VARCHAR(255),
+    email VARCHAR(255),
+    phone_no INTEGER,
+    city VARCHAR(255),
+    yoe VARCHAR(20),
+    qualification VARCHAR(50),
+    description TEXT(65535),
+    PRIMARY KEY(id)
+)`
+
+
+sql = `CREATE TABLE job_fields (
+    job_id VARCHAR(255) NOT NULL,
+    field_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (job_id, field_name),
+    FOREIGN KEY (job_id) REFERENCES Jobs(id)
+);`
+
+sql = 
+`CREATE TABLE user_fields (
     username VARCHAR(255) NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     PRIMARY KEY (username, field_name),

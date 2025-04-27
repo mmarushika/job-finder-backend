@@ -20,8 +20,11 @@ app.use(cors());
 
 import {entryRoutes} from './routes/entryRoutes.mjs';
 import { profileRoutes } from './routes/profileRoutes.mjs';
+import { jobRoutes } from './routes/jobRoutes.mjs';
+
 app.use(entryRoutes);
 app.use(profileRoutes);
+app.use(jobRoutes);
 
 app.get("/jobs/all", async (req, res) => {
     const data = await getJobListings();

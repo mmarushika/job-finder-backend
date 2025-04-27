@@ -9,6 +9,7 @@ entryRoutes.get('/login', login);
 
 // Callback function
 import { createUser, getUser } from '../services/mySQLServices.mjs';
+
 async function signup(req, res) {
     const { username, password } = req.body;
     createUser(username, password);

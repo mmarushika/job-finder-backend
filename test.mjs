@@ -97,11 +97,52 @@ const profile = {
     description : "Blah",
     fields : ['Artificial Intelligence & Machine Learning', 'Engineering', 'Environmental Science', 'Research & Development']
 }
-async function run() {
-    //const res = await getUser('alice123');
-    updateProfile(profile);
-    //console.log(res);
-    let sql = 'DELETE FROM FIELDS WHERE username = ?'
+const job = {
+    poster: 'emily123',
+    id: 'm9zopav900suvc0cdb45',
+    timestamp: '"2025-04-27T13:27:38.565Z"',
+    title: 'A',
+    employer_name: 'A',
+    employer_email: 'A',
+    employer_phone_no: 123213,
+    city: 'A',
+    yoe: '< 1 years',
+    qualification: 'High School Diploma',
+    description: 'A',
+    fields: [ 'Artificial Intelligence & Machine Learning', 'Engineering' ]
+  }
+export async function addJobListing(job) {
+    // Add job details
+    let sql = 'INSERT INTO JOBS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    let values = [job.poster, job.id, job.timestamp, job.title, job.employer_name,
+         job.employer_email, job.employer_phone_no, job.city, job.yoe, 
+         job.qualification, job.description];
+    await executeQuery(sql, values);
+
+    // Add job listing fields
+    sql = 'INSERT INTO JOB_FIELDS (job_id, field_name) VALUES ?'
+    values = job.fields.map(field => [job.id, field]);
+    console.log(values);
+    insertMultiple(sql, values).catch(console.err); 
 }
+
+export async function getJobListings(user) {
+    let sql = `SELECT * FROM JOBS WHERE poster = ?`;
+
+    const rows = await executeQuery(sql, [user]);
+    const res = await Promise.all(rows.map(async (i) => {
+        sql = 'SELECT field_name FROM JOB_FIELDS WHERE job_id = ?'
+        const fields = await executeQuery(sql, [i.id]);
+        const fieldNames = fields.map(i => i.field_name);
+        return {...i, fields : [...fieldNames]};
+    }));
+    return res;
+}
+
+async function run() {
+    const res = await getJobListings('emily123');
+    console.dir(res, { depth: null });
+}
+
 
 run();
